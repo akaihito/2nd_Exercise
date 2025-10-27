@@ -1,70 +1,52 @@
-# Getting Started with Create React App
+# 📚 StudySync
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+**StudySync**は、勉強時間を記録・可視化し、継続をサポートするReact製のタイマーアプリです。勉強セッションを開始・終了するだけで、勉強時間が自動で記録され、グラフやログとして表示されます。
 
-## Available Scripts
+---
 
-In the project directory, you can run:
+## 🧩 主な機能
 
-### `npm start`
+- ⏱️ **勉強タイマー**：ボタンを押すだけで勉強セッションを開始・終了できます  
+- 📝 **メモ記録**：勉強中に内容や気分をメモとして残せます  
+- 📊 **グラフ表示**：日別の勉強時間を棒グラフで可視化  
+- 🧠 **レベルシステム**：累計勉強時間に応じてレベルと称号が変化  
+- 💾 **ローカル保存**：勉強ログはブラウザのlocalStorageに保存され、再起動しても保持されます  
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+---
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## 🚀 使い方
 
-### `npm test`
+1. 「勉強スタート ▶️」ボタンをクリックしてセッション開始  
+2. 勉強中はタイマーが進行し、メモを自由に記入可能  
+3. 「セッション終了」ボタンで記録を保存  
+4. 勉強時間の推移はグラフで確認可能  
+5. 過去のログは一覧で表示され、振り返りに便利  
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+---
 
-### `npm run build`
+## 🧮 レベルと称号
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+| 累計時間（秒） | レベル | 称号         |
+|----------------|--------|--------------|
+| 0〜599         | Lv.1   | 初心者       |
+| 600〜1799      | Lv.2   | 継続王       |
+| 1800〜3599     | Lv.3   | 集中マスター |
+| 3600以上       | Lv.4   | 勉強仙人     |
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+---
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## 🛠️ 技術スタック
 
-### `npm run eject`
+- React（Hooks使用）  
+- Chart.js（react-chartjs-2）  
+- localStorage（データ永続化）  
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+---
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## 📦 インストールと起動
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+```bash
+git clone https://github.com/akaihito/2nd_Exercise
+cd studysync
+npm install
+npm start
