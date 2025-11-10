@@ -4,7 +4,7 @@ import { Chart, BarElement, CategoryScale, LinearScale } from 'chart.js';
 
 Chart.register(BarElement, CategoryScale, LinearScale);
 
-function App() {
+function SoloStudy() {
   const [isStudying, setIsStudying] = useState(false);
   const [startTime, setStartTime] = useState(null);
   const [duration, setDuration] = useState(0);
@@ -44,7 +44,6 @@ function App() {
     setMemo('');
   };
 
-  // グラフ用データ集計
   const dailyTotals = logs.reduce((acc, log) => {
     acc[log.date] = (acc[log.date] || 0) + log.duration;
     return acc;
@@ -61,7 +60,6 @@ function App() {
     ],
   };
 
-  // 累計時間からレベルと称号を算出
   const totalTime = logs.reduce((sum, log) => sum + log.duration, 0);
   let level = 1;
   let title = '初心者';
@@ -123,4 +121,4 @@ function App() {
   );
 }
 
-export default App;
+export default SoloStudy;
