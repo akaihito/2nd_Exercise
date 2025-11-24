@@ -1,7 +1,7 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import ModeSelect from './ModeSelect.js';
-import SoloStudy from './SoloStudy.js';
+import SoloStudy from './model.js';
 import RoomStudy from './RoomStudy.js';
 import JoinRoom from './JoinRoom';
 
