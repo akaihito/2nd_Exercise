@@ -44,6 +44,7 @@ function SoloStudy() {
     setMemo('');
   };
 
+  // 日ごとの合計
   const dailyTotals = logs.reduce((acc, log) => {
     acc[log.date] = (acc[log.date] || 0) + log.duration;
     return acc;
@@ -55,31 +56,42 @@ function SoloStudy() {
       {
         label: '勉強時間（秒）',
         data: Object.values(dailyTotals),
-        backgroundColor: '#4caf50',
+        borderColor: '#4caf50',   // ← 修正
+        backgroundColor: '#a5d6a7',
+        fill: false,
+        tension: 0.2,
       },
     ],
   };
 
+  // 累計時間
   const totalTime = logs.reduce((sum, log) => sum + log.duration, 0);
-  let level = 1;
-  let title = '初心者';
-  if (totalTime >= 3600) {
-    level = 4;
-    title = '勉強仙人';
-  } else if (totalTime >= 1800) {
-    level = 3;
-    title = '集中マスター';
-  } else if (totalTime >= 600) {
-    level = 2;
-    title = '継続王';
-  }
+
+  // 称号リスト
+  const titles = [
+    { threshold: 0, title: '初心者' },
+    { threshold: 600, title: '継続王' },
+    { threshold: 1800, title: '集中マスター' },
+    { threshold: 3600, title: '勉強仙人' },
+    { threshold: 7200, title: '知識賢者' },
+  ];
+
+  const getTitle = (totalTime) => {
+    let currentTitle = titles[0].title;
+    for (const t of titles) {
+      if (totalTime >= t.threshold) {
+        currentTitle = t.title;
+      }
+    }
+    return currentTitle;
+  };
 
   return (
     <div style={{ maxWidth: '600px', margin: '0 auto', padding: '20px', fontFamily: 'sans-serif' }}>
       <h2>📚 StudySync</h2>
 
       <div style={{ marginBottom: '20px' }}>
-        <strong>🧠 あなたのレベル：Lv.{level}（{title}）</strong><br />
+        <strong>🏅 あなたの称号：{getTitle(totalTime)}</strong><br />
         累計勉強時間：{totalTime} 秒
       </div>
 
