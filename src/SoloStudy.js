@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { Bar } from 'react-chartjs-2';
-import { Chart, BarElement, CategoryScale, LinearScale } from 'chart.js';
+import { Line } from 'react-chartjs-2';
+import { Chart, LineElement, PointElement, CategoryScale, LinearScale } from 'chart.js';
 
-Chart.register(BarElement, CategoryScale, LinearScale);
+Chart.register(LineElement, PointElement, CategoryScale, LinearScale);
 
 function SoloStudy() {
   const [isStudying, setIsStudying] = useState(false);
@@ -104,7 +104,7 @@ function SoloStudy() {
 
       <hr />
       <h3>📊 勉強時間の推移</h3>
-      {logs.length === 0 ? <p>まだ記録がありません。</p> : <Bar data={chartData} />}
+      {logs.length === 0 ? <p>まだ記録がありません。</p> : <Line data={chartData} />}
 
       <hr />
       <h3>📝 過去の勉強ログ</h3>
