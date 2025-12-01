@@ -1,15 +1,27 @@
 import React from 'react';
-import { FaTimes } from 'react-icons/fa';
 
-function StudyPanel() {
+function StudyPanel({ filterSubjects = [], toggleFilter = () => { } }) {
+    const subjects = ['国語', '数学', '現代社会', '英語', '理科'];
+
     return (
         <div className="study-panel">
             <div className="panel-section">
-                <h4>教科</h4>
+                <h4>教科 (クリックで絞り込み)</h4>
                 <div className="tags">
-                    <span className="tag">国語 <FaTimes className="tag-close" /></span>
-                    <span className="tag">数学 <FaTimes className="tag-close" /></span>
-                    <span className="tag">現代社会 <FaTimes className="tag-close" /></span>
+                    {subjects.map((sub) => (
+                        <span
+                            key={sub}
+                            className={`tag ${filterSubjects.includes(sub) ? 'active' : ''}`}
+                            onClick={() => toggleFilter(sub)}
+                            style={{
+                                cursor: 'pointer',
+                                backgroundColor: filterSubjects.includes(sub) ? '#007bff' : '#f1f3f5',
+                                color: filterSubjects.includes(sub) ? '#fff' : 'inherit',
+                            }}
+                        >
+                            {sub}
+                        </span>
+                    ))}
                 </div>
             </div>
 
