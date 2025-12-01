@@ -22,7 +22,7 @@ function RoomStudy() {
   const location = useLocation();
   const fullUrl = `${window.location.origin}${location.pathname}`;
 
-  const [userName, setUserName] = useState('');
+  const [userName, setUserName] = useState(localStorage.getItem('studysync-username') || '');
   const [duration, setDuration] = useState(0);
   const [isStudying, setIsStudying] = useState(false);
   const [members, setMembers] = useState({});
@@ -107,79 +107,86 @@ function RoomStudy() {
   };
 
   return (
-    <div style={{ maxWidth: '700px', margin: '0 auto', padding: '20px', fontFamily: 'sans-serif' }}>
-      <h2>🧑‍🤝‍🧑 勉強ルーム：{roomId}</h2>
+    <div className="container room-container">
+      <div className="room-header">
+        <h2>🧑‍🤝‍🧑 勉強ルーム：{roomId}</h2>
+      </div>
 
       {!isStudying ? (
-        <>
+        <div className="card">
           <input
             type="text"
             placeholder="あなたの名前"
             value={userName}
             onChange={(e) => setUserName(e.target.value)}
-            style={{ width: '100%', marginBottom: '10px' }}
           />
-          <button onClick={joinRoom} style={{ backgroundColor: '#4caf50', color: 'white', padding: '10px' }}>
+          <button onClick={joinRoom} className="btn-primary" style={{ width: '100%' }}>
             勉強スタート ▶️
           </button>
-        </>
+        </div>
       ) : (
-        <>
-          <p>⏱️ あなたの勉強時間：{duration} 秒</p>
+        <div className="card text-center">
+          <p className="timer-display">⏱️ あなたの勉強時間：{duration} 秒</p>
 
           <button
             onClick={() => setShowShareBar(!showShareBar)}
-            style={{ marginBottom: '10px', backgroundColor: '#2196f3', color: 'white', padding: '8px' }}
+            className="btn-secondary mb-10"
           >
             {showShareBar ? '共有バーを隠す' : '共有バーを表示'}
           </button>
 
           {showShareBar && (
-            <div style={{ border: '1px solid #ccc', padding: '10px', marginBottom: '20px', borderRadius: '8px' }}>
+            <div className="share-bar">
               <h3>📱 QRコードで部屋を共有</h3>
-              <QRCodeCanvas value={fullUrl} size={180} />
-              <p style={{ fontSize: '0.9em', color: '#555' }}>{fullUrl}</p>
-              <button onClick={copyToClipboard} style={{ padding: '6px 12px' }}>
+              <div style={{ background: 'white', padding: '10px', display: 'inline-block', borderRadius: '8px' }}>
+                <QRCodeCanvas value={fullUrl} size={180} />
+              </div>
+              <p style={{ fontSize: '0.9em', color: '#555', wordBreak: 'break-all' }}>{fullUrl}</p>
+              <button onClick={copyToClipboard} className="btn-secondary" style={{ padding: '6px 12px' }}>
                 📋 URLをコピー
               </button>
               <span style={{ marginLeft: '10px', color: 'green' }}>{copySuccess}</span>
             </div>
           )}
-        </>
+        </div>
       )}
 
       <hr />
       <h3>📋 参加者一覧</h3>
-      <ul>
-        {Object.values(members).map((m, i) => (
-          <li key={i}>
-            {m.userName}：{m.duration} 秒
-          </li>
-        ))}
-      </ul>
+      <div className="card">
+        <ul className="log-list">
+          {Object.values(members).map((m, i) => (
+            <li key={i} className="log-item">
+              {m.userName}：{m.duration} 秒
+            </li>
+          ))}
+        </ul>
+      </div>
 
       <h3>📊 勉強時間グラフ</h3>
-      <div style={{ backgroundColor: '#f9f9f9', padding: '10px', borderRadius: '8px', marginBottom: '20px' }}>
+      <div className="card">
         <Bar data={chartData} options={chartOptions} />
       </div>
 
       <h3>💬 チャット</h3>
-      <div style={{ border: '1px solid #ccc', padding: '10px', borderRadius: '8px', marginBottom: '20px' }}>
-        <div style={{ maxHeight: '150px', overflowY: 'auto', marginBottom: '10px' }}>
+      <div className="chat-box">
+        <div className="chat-log">
           {chatLog.map((msg, i) => (
-            <div key={i}>
+            <div key={i} className="chat-message">
               <strong>{msg.userName}：</strong> {msg.message}
             </div>
           ))}
         </div>
-        <input
-          type="text"
-          placeholder="メッセージを入力"
-          value={chatInput}
-          onChange={(e) => setChatInput(e.target.value)}
-          style={{ width: '80%', marginRight: '10px' }}
-        />
-        <button onClick={sendMessage}>送信</button>
+        <div className="chat-input-area">
+          <input
+            type="text"
+            placeholder="メッセージを入力"
+            value={chatInput}
+            onChange={(e) => setChatInput(e.target.value)}
+            style={{ marginBottom: 0 }}
+          />
+          <button onClick={sendMessage} className="btn-primary">送信</button>
+        </div>
       </div>
     </div>
   );
