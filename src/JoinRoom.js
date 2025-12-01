@@ -13,17 +13,17 @@ function JoinRoom() {
   };
 
   return (
-    <div style={{ textAlign: 'center', padding: '40px' }}>
-      <h2>🔑 部屋に参加する</h2>
-      <input
-        type="text"
-        placeholder="部屋IDを入力"
-        value={roomId}
-        onChange={(e) => setRoomId(e.target.value)}
-        style={{ marginBottom: '10px' }}
-      />
-      <br />
-      <button onClick={enterRoom}>参加する</button>
+    <div className="mode-select-container">
+      <div className="card text-center">
+        <h2>🔑 部屋に参加する</h2>
+        <input
+          type="text"
+          placeholder="部屋IDを入力"
+          value={roomId}
+          onChange={(e) => setRoomId(e.target.value)}
+        />
+        <button onClick={enterRoom} className="btn-primary mt-10">参加する</button>
+      </div>
     </div>
   );
 }
