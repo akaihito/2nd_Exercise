@@ -33,20 +33,20 @@ function RoomStudy() {
   const [chatLog, setChatLog] = useState([]);
 
   useEffect(() => {
-    socket.on('roomUpdate', (data) => {
-      setMembers(data);
-    });
-
-    socket.on('chatUpdate', ({ userName, message }) => {
+    const handleRoomUpdate = (data) => setMembers(data);
+    const handleChatUpdate = ({ userName, message }) => {
       setChatLog((prev) => [...prev, { userName, message }]);
-    });
+    };
+    const handleChatHistory = (history) => setChatLog(history);
 
-    socket.on('chatHistory', (history) => {
-      setChatLog(history);
-    });
+    socket.on('roomUpdate', handleRoomUpdate);
+    socket.on('chatUpdate', handleChatUpdate);
+    socket.on('chatHistory', handleChatHistory);
 
     return () => {
-      socket.disconnect();
+      socket.off('roomUpdate', handleRoomUpdate);
+      socket.off('chatUpdate', handleChatUpdate);
+      socket.off('chatHistory', handleChatHistory);
     };
   }, [roomId]);
 
