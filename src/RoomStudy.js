@@ -88,6 +88,7 @@ function RoomStudy() {
     setDuration(startDuration);
 
     // 初期状態を保存
+    localStorage.setItem('studysync-username', userName);
     localStorage.setItem('studysync_room_id', roomId);
     localStorage.setItem('studysync_is_studying', 'true');
     localStorage.setItem('studysync_duration', startDuration.toString());
