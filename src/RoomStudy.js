@@ -15,7 +15,8 @@ import {
 
 ChartJS.register(BarElement, CategoryScale, LinearScale, Tooltip, Legend);
 
-const socket = io('http://localhost:4000'); // サーバーのURLに合わせて変更
+const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:4000';
+const socket = io(API_URL);
 
 function RoomStudy() {
   const { roomId } = useParams();
@@ -157,7 +158,7 @@ function RoomStudy() {
         <ul className="log-list">
           {Object.values(members).map((m, i) => (
             <li key={i} className="log-item">
-              {m.userName}：{m.duration} 秒
+              {m.userName}{m.isHost ? ' (ホスト)' : ''}：{m.duration} 秒
             </li>
           ))}
         </ul>
