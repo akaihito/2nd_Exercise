@@ -80,6 +80,8 @@ function RoomStudy() {
   }, [isStudying, roomId]);
 
   const joinRoom = (startDuration = 0) => {
+    if (typeof startDuration !== 'number') startDuration = 0;
+
     if (!userName) return;
     socket.emit('joinRoom', { roomId, userName, duration: startDuration });
     setIsStudying(true);
