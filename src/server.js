@@ -20,10 +20,10 @@ const rooms = {}; // 各部屋の参加者と勉強時間を保持
 io.on('connection', (socket) => {
   console.log('✅ ユーザー接続:', socket.id);
 
-  socket.on('joinRoom', ({ roomId, userName }) => {
+  socket.on('joinRoom', ({ roomId, userName, duration }) => {
     socket.join(roomId);
     if (!rooms[roomId]) rooms[roomId] = {};
-    rooms[roomId][socket.id] = { userName, duration: 0 };
+    rooms[roomId][socket.id] = { userName, duration: duration || 0 };
     io.to(roomId).emit('roomUpdate', rooms[roomId]);
   });
 
