@@ -16,6 +16,7 @@ const io = new Server(server, {
 });
 
 const rooms = {}; // 各部屋の参加者と勉強時間を保持
+const roomChats = {}; // 各部屋のチャット履歴を保持
 
 io.on('connection', (socket) => {
   console.log('✅ ユーザー接続:', socket.id);
@@ -23,8 +24,13 @@ io.on('connection', (socket) => {
   socket.on('joinRoom', ({ roomId, userName, duration }) => {
     socket.join(roomId);
     if (!rooms[roomId]) rooms[roomId] = {};
+    if (!roomChats[roomId]) roomChats[roomId] = []; // チャット履歴の初期化
+
     rooms[roomId][socket.id] = { userName, duration: duration || 0 };
     io.to(roomId).emit('roomUpdate', rooms[roomId]);
+
+    // 過去のチャット履歴を送信
+    socket.emit('chatHistory', roomChats[roomId]);
   });
 
   socket.on('updateDuration', ({ roomId, duration }) => {
@@ -35,7 +41,13 @@ io.on('connection', (socket) => {
   });
 
   socket.on('chatMessage', ({ roomId, userName, message }) => {
-    io.to(roomId).emit('chatUpdate', { userName, message });
+    const chatData = { userName, message };
+    if (roomChats[roomId]) {
+      roomChats[roomId].push(chatData);
+      // 履歴が多すぎたら古いものを消す（オプション: 最新50件まで）
+      if (roomChats[roomId].length > 50) roomChats[roomId].shift();
+    }
+    io.to(roomId).emit('chatUpdate', chatData);
   });
 
   socket.on('disconnect', () => {

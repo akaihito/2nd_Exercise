@@ -41,6 +41,10 @@ function RoomStudy() {
       setChatLog((prev) => [...prev, { userName, message }]);
     });
 
+    socket.on('chatHistory', (history) => {
+      setChatLog(history);
+    });
+
     return () => {
       socket.disconnect();
     };
