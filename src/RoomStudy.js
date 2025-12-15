@@ -46,6 +46,19 @@ function RoomStudy() {
     };
   }, [roomId]);
 
+  // 自動再参加ロジック
+  useEffect(() => {
+    const savedRoomId = localStorage.getItem('studysync_room_id');
+    const savedIsStudying = localStorage.getItem('studysync_is_studying');
+    const savedDuration = parseInt(localStorage.getItem('studysync_duration') || '0', 10);
+
+    if (savedRoomId === roomId && savedIsStudying === 'true' && userName) {
+      // 自動復帰
+      joinRoom(savedDuration);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [roomId]); // 初回マウント時のみ（roomIdが変わった時も含む）チェック
+
   useEffect(() => {
     let timer;
     if (isStudying) {
@@ -53,6 +66,12 @@ function RoomStudy() {
         setDuration((prev) => {
           const newTime = prev + 1;
           socket.emit('updateDuration', { roomId, duration: newTime });
+
+          // 状態を保存
+          localStorage.setItem('studysync_room_id', roomId);
+          localStorage.setItem('studysync_is_studying', 'true');
+          localStorage.setItem('studysync_duration', newTime.toString());
+
           return newTime;
         });
       }, 1000);
@@ -60,10 +79,16 @@ function RoomStudy() {
     return () => clearInterval(timer);
   }, [isStudying, roomId]);
 
-  const joinRoom = () => {
+  const joinRoom = (startDuration = 0) => {
     if (!userName) return;
-    socket.emit('joinRoom', { roomId, userName });
+    socket.emit('joinRoom', { roomId, userName, duration: startDuration });
     setIsStudying(true);
+    setDuration(startDuration);
+
+    // 初期状態を保存
+    localStorage.setItem('studysync_room_id', roomId);
+    localStorage.setItem('studysync_is_studying', 'true');
+    localStorage.setItem('studysync_duration', startDuration.toString());
   };
 
   const copyToClipboard = () => {
