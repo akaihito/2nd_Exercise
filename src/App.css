@@ -602,6 +602,13 @@ input:checked+.slider:before {
   gap: 10px;
 }
 
+.chat-send-btn {
+  padding: 10px;
+  min-width: 60px;
+  /* 横2文字が入るくらいの幅 */
+  white-space: nowrap;
+}
+
 /* Sidebar Styles */
 .hamburger-menu {
   position: fixed;

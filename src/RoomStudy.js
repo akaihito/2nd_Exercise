@@ -33,7 +33,10 @@ function RoomStudy() {
   const [chatLog, setChatLog] = useState([]);
 
   useEffect(() => {
-    const handleRoomUpdate = (data) => setMembers(data);
+    const handleRoomUpdate = (data) => {
+      console.log('📡 roomUpdate受信:', data);
+      setMembers(data);
+    };
     const handleChatUpdate = ({ userName, message }) => {
       setChatLog((prev) => [...prev, { userName, message }]);
     };
@@ -43,12 +46,22 @@ function RoomStudy() {
     socket.on('chatUpdate', handleChatUpdate);
     socket.on('chatHistory', handleChatHistory);
 
+    // サーバー再接続時に自動で再入室する
+    socket.on('connect', () => {
+      console.log('🔌 サーバーに接続しました');
+      if (isStudying && userName) {
+        console.log('🔄 自動再入室を試みます');
+        joinRoom(duration);
+      }
+    });
+
     return () => {
       socket.off('roomUpdate', handleRoomUpdate);
       socket.off('chatUpdate', handleChatUpdate);
       socket.off('chatHistory', handleChatHistory);
+      socket.off('connect');
     };
-  }, [roomId]);
+  }, [roomId, isStudying, userName, duration]);
 
   // 自動再参加ロジック
   useEffect(() => {
@@ -152,6 +165,7 @@ function RoomStudy() {
             placeholder="あなたの名前"
             value={userName}
             onChange={(e) => setUserName(e.target.value)}
+            onKeyDown={(e) => e.key === 'Enter' && joinRoom()}
           />
           <button onClick={joinRoom} className="btn-primary" style={{ width: '100%' }}>
             勉強スタート ▶️
@@ -216,9 +230,10 @@ function RoomStudy() {
             placeholder="メッセージを入力"
             value={chatInput}
             onChange={(e) => setChatInput(e.target.value)}
+            onKeyDown={(e) => e.key === 'Enter' && sendMessage()}
             style={{ marginBottom: 0 }}
           />
-          <button onClick={sendMessage} className="btn-primary">送信</button>
+          <button onClick={sendMessage} className="btn-primary chat-send-btn">送信</button>
         </div>
       </div>
     </div>
