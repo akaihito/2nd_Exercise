@@ -128,6 +128,27 @@ function RoomStudy() {
   const memberNames = Object.values(members).map((m) => m.userName);
   const memberDurations = Object.values(members).map((m) => m.duration);
 
+  const leaveRoom = () => {
+    socket.disconnect(); // サーバーから切断
+    socket.connect(); // 再接続して新しいSocketIDを取得（念の為）
+    setIsStudying(false);
+    // localStorageはそのまま残す（一時退出）
+  };
+
+  const exitRoom = () => {
+    socket.disconnect(); // サーバーから切断
+    socket.connect(); // 再接続
+    setIsStudying(false);
+    setDuration(0);
+    setUserName('');
+
+    // localStorageを削除（完全退出）
+    localStorage.removeItem('studysync-username');
+    localStorage.removeItem('studysync_room_id');
+    localStorage.removeItem('studysync_is_studying');
+    localStorage.removeItem('studysync_duration');
+  };
+
   const chartData = {
     labels: memberNames,
     datasets: [
@@ -175,12 +196,31 @@ function RoomStudy() {
         <div className="card text-center">
           <p className="timer-display">⏱️ あなたの勉強時間：{duration} 秒</p>
 
-          <button
-            onClick={() => setShowShareBar(!showShareBar)}
-            className="btn-secondary mb-10"
-          >
-            {showShareBar ? '共有バーを隠す' : '共有バーを表示'}
-          </button>
+
+          <div style={{ margin: '20px 0' }}>
+            <button
+              onClick={() => setShowShareBar(!showShareBar)}
+              className="btn-secondary"
+            >
+              {showShareBar ? '共有バーを隠す' : '共有バーを表示'}
+            </button>
+
+            <button
+              onClick={leaveRoom}
+              className="btn-secondary"
+              style={{ marginLeft: '10px', backgroundColor: '#ffc107', color: '#000' }}
+            >
+              一時退出 ⏸️
+            </button>
+
+            <button
+              onClick={exitRoom}
+              className="btn-danger"
+              style={{ marginLeft: '10px' }}
+            >
+              退出 🚪
+            </button>
+          </div>
 
           {showShareBar && (
             <div className="share-bar">
