@@ -97,7 +97,14 @@ function RoomStudy() {
   }, [isStudying, roomId]);
 
   const joinRoom = (startDuration = 0) => {
-    if (typeof startDuration !== 'number') startDuration = 0;
+    if (typeof startDuration !== 'number') {
+      const savedRoomId = localStorage.getItem('studysync_room_id');
+      if (savedRoomId === roomId) {
+        startDuration = parseInt(localStorage.getItem('studysync_duration') || '0', 10);
+      } else {
+        startDuration = 0;
+      }
+    }
 
     if (!userName) return;
     socket.emit('joinRoom', { roomId, userName, duration: startDuration });
