@@ -61,7 +61,7 @@ function RoomStudy() {
       socket.off('chatHistory', handleChatHistory);
       socket.off('connect');
     };
-  }, [roomId, isStudying, userName, duration]);
+  }, [roomId, isStudying, userName, duration, joinRoom]);
 
   // 自動再参加ロジック
   useEffect(() => {
