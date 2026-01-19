@@ -1,5 +1,5 @@
 // src/RoomStudy.js
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { useParams, useLocation } from 'react-router-dom';
 import { io } from 'socket.io-client';
 import { QRCodeCanvas } from 'qrcode.react';
@@ -32,25 +32,49 @@ function RoomStudy() {
   const [chatInput, setChatInput] = useState('');
   const [chatLog, setChatLog] = useState([]);
 
+  // -------------------------
+  // ✅ joinRoom を useCallback でメモ化
+  // -------------------------
+  const joinRoom = useCallback(
+    (startDuration = 0) => {
+      if (typeof startDuration !== 'number') {
+        const savedRoomId = localStorage.getItem('studysync_room_id');
+        if (savedRoomId === roomId) {
+          startDuration = parseInt(localStorage.getItem('studysync_duration') || '0', 10);
+        } else {
+          startDuration = 0;
+        }
+      }
+
+      if (!userName) return;
+
+      socket.emit('joinRoom', { roomId, userName, duration: startDuration });
+      setIsStudying(true);
+      setDuration(startDuration);
+
+      localStorage.setItem('studysync-username', userName);
+      localStorage.setItem('studysync_room_id', roomId);
+      localStorage.setItem('studysync_is_studying', 'true');
+      localStorage.setItem('studysync_duration', startDuration.toString());
+    },
+    [roomId, userName]
+  );
+
+  // -------------------------
+  // ソケットイベント登録
+  // -------------------------
   useEffect(() => {
-    const handleRoomUpdate = (data) => {
-      console.log('📡 roomUpdate受信:', data);
-      setMembers(data);
-    };
-    const handleChatUpdate = ({ userName, message }) => {
+    const handleRoomUpdate = (data) => setMembers(data);
+    const handleChatUpdate = ({ userName, message }) =>
       setChatLog((prev) => [...prev, { userName, message }]);
-    };
     const handleChatHistory = (history) => setChatLog(history);
 
     socket.on('roomUpdate', handleRoomUpdate);
     socket.on('chatUpdate', handleChatUpdate);
     socket.on('chatHistory', handleChatHistory);
 
-    // サーバー再接続時に自動で再入室する
     socket.on('connect', () => {
-      console.log('🔌 サーバーに接続しました');
       if (isStudying && userName) {
-        console.log('🔄 自動再入室を試みます');
         joinRoom(duration);
       }
     });
@@ -63,19 +87,22 @@ function RoomStudy() {
     };
   }, [roomId, isStudying, userName, duration, joinRoom]);
 
-  // 自動再参加ロジック
+  // -------------------------
+  // 自動復帰
+  // -------------------------
   useEffect(() => {
     const savedRoomId = localStorage.getItem('studysync_room_id');
     const savedIsStudying = localStorage.getItem('studysync_is_studying');
     const savedDuration = parseInt(localStorage.getItem('studysync_duration') || '0', 10);
 
     if (savedRoomId === roomId && savedIsStudying === 'true' && userName) {
-      // 自動復帰
       joinRoom(savedDuration);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [roomId]); // 初回マウント時のみ（roomIdが変わった時も含む）チェック
+  }, [roomId, userName, joinRoom]);
 
+  // -------------------------
+  // タイマー
+  // -------------------------
   useEffect(() => {
     let timer;
     if (isStudying) {
@@ -84,7 +111,6 @@ function RoomStudy() {
           const newTime = prev + 1;
           socket.emit('updateDuration', { roomId, duration: newTime });
 
-          // 状態を保存
           localStorage.setItem('studysync_room_id', roomId);
           localStorage.setItem('studysync_is_studying', 'true');
           localStorage.setItem('studysync_duration', newTime.toString());
@@ -96,28 +122,9 @@ function RoomStudy() {
     return () => clearInterval(timer);
   }, [isStudying, roomId]);
 
-  const joinRoom = (startDuration = 0) => {
-    if (typeof startDuration !== 'number') {
-      const savedRoomId = localStorage.getItem('studysync_room_id');
-      if (savedRoomId === roomId) {
-        startDuration = parseInt(localStorage.getItem('studysync_duration') || '0', 10);
-      } else {
-        startDuration = 0;
-      }
-    }
-
-    if (!userName) return;
-    socket.emit('joinRoom', { roomId, userName, duration: startDuration });
-    setIsStudying(true);
-    setDuration(startDuration);
-
-    // 初期状態を保存
-    localStorage.setItem('studysync-username', userName);
-    localStorage.setItem('studysync_room_id', roomId);
-    localStorage.setItem('studysync_is_studying', 'true');
-    localStorage.setItem('studysync_duration', startDuration.toString());
-  };
-
+  // -------------------------
+  // その他の関数
+  // -------------------------
   const copyToClipboard = () => {
     navigator.clipboard.writeText(fullUrl).then(() => {
       setCopySuccess('✅ コピーしました！');
@@ -132,29 +139,27 @@ function RoomStudy() {
     }
   };
 
-  const memberNames = Object.values(members).map((m) => m.userName);
-  const memberDurations = Object.values(members).map((m) => m.duration);
-
   const leaveRoom = () => {
-    socket.disconnect(); // サーバーから切断
-    socket.connect(); // 再接続して新しいSocketIDを取得（念の為）
+    socket.disconnect();
+    socket.connect();
     setIsStudying(false);
-    // localStorageはそのまま残す（一時退出）
   };
 
   const exitRoom = () => {
-    socket.disconnect(); // サーバーから切断
-    socket.connect(); // 再接続
+    socket.disconnect();
+    socket.connect();
     setIsStudying(false);
     setDuration(0);
     setUserName('');
 
-    // localStorageを削除（完全退出）
     localStorage.removeItem('studysync-username');
     localStorage.removeItem('studysync_room_id');
     localStorage.removeItem('studysync_is_studying');
     localStorage.removeItem('studysync_duration');
   };
+
+  const memberNames = Object.values(members).map((m) => m.userName);
+  const memberDurations = Object.values(members).map((m) => m.duration);
 
   const chartData = {
     labels: memberNames,
@@ -169,15 +174,8 @@ function RoomStudy() {
 
   const chartOptions = {
     responsive: true,
-    plugins: {
-      legend: { display: false },
-    },
-    scales: {
-      y: {
-        beginAtZero: true,
-        ticks: { stepSize: 10 },
-      },
-    },
+    plugins: { legend: { display: false } },
+    scales: { y: { beginAtZero: true, ticks: { stepSize: 10 } } },
   };
 
   return (
@@ -202,7 +200,6 @@ function RoomStudy() {
       ) : (
         <div className="card text-center">
           <p className="timer-display">⏱️ あなたの勉強時間：{duration} 秒</p>
-
 
           <div style={{ margin: '20px 0' }}>
             <button
