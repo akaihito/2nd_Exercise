@@ -31,15 +31,15 @@ graph LR
 
 ### 画面構成
 
-![モード選択](C:\Users\ITWhiteHacker\2nd_Exercise\image_for_doc\モード選択.png)
+![モード選択](/image_for_doc/モード選択.png)
 
-![ソロ学習](C:\Users\ITWhiteHacker\2nd_Exercise\image_for_doc\ソロ学習.png)
+![ソロ学習](/image_for_doc/ソロ画面.png)
 
-![マルチ入室](C:\Users\ITWhiteHacker\2nd_Exercise\image_for_doc\マルチ入室.png)
+![マルチ入室](/image_for_doc/マルチ入室.png)
 
-![マルチ画面](C:\Users\ITWhiteHacker\2nd_Exercise\image_for_doc\マルチ画面.png)
+![マルチ画面](/image_for_doc/マルチ画面.png)
 
-![マルチ画面](C:\Users\ITWhiteHacker\2nd_Exercise\image_for_doc\マルチ画面2.png)
+![マルチ画面](/image_for_doc/マルチ画面2.png)
 
 ### 要件定義
 #### 機能要件
@@ -65,7 +65,7 @@ graph LR
 
 ## 🔗 関連リンク
 
-- **FigJam (設計メモ)**: (https://www.figma.com/board/drcksRqjjFtiHAN6ZPV2nj/4%E5%B9%B4%E3%83%81%E3%83%BC%E3%83%A02%EF%BC%9A-%E6%B0%B8%E7%94%B0--%E4%B8%8A%E7%94%B2--%E5%AF%8C%E6%9D%BE-?node-id=0-1&t=GPmVAWuDFNGA28Z2)
+- **FigJam (設計メモ)**: [figjamリンク](https://www.figma.com/board/drcksRqjjFtiHAN6ZPV2nj/4%E5%B9%B4%E3%83%81%E3%83%BC%E3%83%A02%EF%BC%9A-%E6%B0%B8%E7%94%B0--%E4%B8%8A%E7%94%B2--%E5%AF%8C%E6%9D%BE-?node-id=0-1&t=GPmVAWuDFNGA28Z2)
 
 ---
 
