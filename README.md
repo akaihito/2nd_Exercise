@@ -12,13 +12,9 @@
 
 ## 🏗️ システム構成図
 
-```mermaid
-graph TD
-    User[ユーザー (ブラウザ)] <--> Frontend[フロントエンド (画面機能 / React)]
-    Frontend <--> Backend[バックエンド (通信サーバー / Node.js)]
-    Backend <--> Memory[メモリ保存 (チャット・参加者データ)]
-    Frontend <--> LocalStorage[ブラウザ保存 (設定・バックアップ)]
-```
+<p align="left">
+  <img width="500" height="300" src="/image_for_doc/システム構成図.png">
+</p>
 
 ---
 
@@ -58,7 +54,6 @@ graph LR
 
 - **FigJam (設計メモ)**: [ここにリンクを貼る]
 - **画面構成図**: [ここにリンクを貼る]
-- **システム構成図**: [ここにリンクを貼る]
 
 ---
 
@@ -89,9 +84,9 @@ graph LR
 
 ```bash
 git clone https://github.com/akaihito/2nd_Exercise
-cd studysync
+cd 2nd_Exercise/
 npm install
 必要な人は以下のコードも実行
-npm install -D chart.js react-chartjs-2
+(npm install -D chart.js react-chartjs-2)
 npm start
 ```
