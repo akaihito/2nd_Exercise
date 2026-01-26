@@ -14,10 +14,12 @@
 
 ```mermaid
 graph TD
-    User[ユーザー (ブラウザ)] <--> Frontend[フロントエンド (画面機能 / React)]
-    Frontend <--> Backend[バックエンド (通信サーバー / Node.js)]
-    Backend <--> Memory[メモリ保存 (チャット・参加者データ)]
-    Frontend <--> LocalStorage[ブラウザ保存 (設定・バックアップ)]
+   graph TD
+  User["ユーザー (ブラウザ)"] <--> Frontend["フロントエンド (画面機能 / React)"]
+  Frontend <--> Backend["バックエンド (通信サーバー / Node.js)"]
+  Backend <--> Memory["メモリ保存 (チャット・参加者データ)"]
+  Frontend <--> LocalStorage["ブラウザ保存 (設定・バックアップ)"]
+
 ```
 
 ---
