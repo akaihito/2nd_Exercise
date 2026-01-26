@@ -26,6 +26,7 @@ graph LR
     Mode[モード選択画面] -->|1人で| Solo[ソロ学習画面]
     Mode -->|みんなと| Settings[入室設定画面]
     Settings --> Room[学習ルーム]
+```
 
 ### 画面構成
 
