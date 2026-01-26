@@ -12,13 +12,12 @@
 
 ## 🏗️ システム構成図
 
-```mermaid
 graph TD
-   graph TD
   User["ユーザー (ブラウザ)"] <--> Frontend["フロントエンド (画面機能 / React)"]
   Frontend <--> Backend["バックエンド (通信サーバー / Node.js)"]
   Backend <--> Memory["メモリ保存 (チャット・参加者データ)"]
   Frontend <--> LocalStorage["ブラウザ保存 (設定・バックアップ)"]
+
 
 ```
 
@@ -60,7 +59,7 @@ graph LR
 
 - **FigJam (設計メモ)**: [ここにリンクを貼る]
 - **画面構成図**: [ここにリンクを貼る]
-- **システム構成図**: [ここにリンクを貼る]
+
 
 ---
 
