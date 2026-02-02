@@ -67,6 +67,8 @@ graph LR
 
 - **FigJam (設計メモ)**: [figjamリンク](https://www.figma.com/board/drcksRqjjFtiHAN6ZPV2nj/4%E5%B9%B4%E3%83%81%E3%83%BC%E3%83%A02%EF%BC%9A-%E6%B0%B8%E7%94%B0--%E4%B8%8A%E7%94%B2--%E5%AF%8C%E6%9D%BE-?node-id=0-1&t=GPmVAWuDFNGA28Z2)
 
+- **StudySync(本番)**: [StudySyncリンク](https://2nd-exercise.vercel.app/)
+
 ---
 
 ## 🚀 使い方
